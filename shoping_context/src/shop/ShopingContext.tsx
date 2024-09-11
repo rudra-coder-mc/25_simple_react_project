@@ -1,5 +1,6 @@
+
 import React, { createContext, useState, ReactNode, useCallback } from "react";
-import { DUMMY_PRODUCTS } from "../dummeyProduct";
+import { DUMMY_PRODUCTS } from "../dummy-products.ts";
 
 // Define a type for the items in the shopping cart
 interface CartItem {
@@ -16,8 +17,7 @@ interface ShoppingCart {
 
 // Define a type for the context value, including state and functions
 interface ShopContextType {
-  shoppingCart: ShoppingCart;
-  setShoppingCart: React.Dispatch<React.SetStateAction<ShoppingCart>>;
+  items: CartItem[];
   handleAddItemToCart: (id: string) => void;
   handleUpdateCartItemQuantity: (productId: string, amount: number) => void;
 }
@@ -46,11 +46,11 @@ const updateCartItem = (
 
 // Create the provider component
 export const ShopProvider: React.FC<ShopProviderProps> = ({ children }) => {
-  const [shoppingCart, setShoppingCart] = useState<ShoppingCart>({ items: [] });
+  const [shopingCart, setShopingCart] = useState<ShoppingCart>({ items: [] });
 
   // Function to handle adding an item to the cart
   const handleAddItemToCart = useCallback((id: string) => {
-    setShoppingCart((prevShoppingCart) => {
+    setShopingCart((prevShoppingCart) => {
       const existingItem = prevShoppingCart.items.find((item) => item.id === id);
 
       if (existingItem) {
@@ -81,7 +81,7 @@ export const ShopProvider: React.FC<ShopProviderProps> = ({ children }) => {
   // Function to handle updating item quantity in the cart
   const handleUpdateCartItemQuantity = useCallback(
     (productId: string, amount: number) => {
-      setShoppingCart((prevShoppingCart) => {
+      setShopingCart((prevShoppingCart) => {
         const updatedItems = updateCartItem(
           prevShoppingCart.items,
           productId,
@@ -100,8 +100,7 @@ export const ShopProvider: React.FC<ShopProviderProps> = ({ children }) => {
   return (
     <ShopContext.Provider
       value={{
-        shoppingCart,
-        setShoppingCart,
+        items: shopingCart.items,
         handleAddItemToCart,
         handleUpdateCartItemQuantity,
       }}

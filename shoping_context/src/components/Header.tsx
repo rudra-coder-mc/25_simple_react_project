@@ -1,11 +1,12 @@
 import { RefObject, useRef } from 'react';
 
 import CartModal from './CartModal';
-import { ShoppingCartState } from '../types';
-interface HeaderProps {
-  cart: ShoppingCartState;
-  onUpdateCartItemQuantity: (productId: string, amount: number) => void;
-}
+import { useContext } from 'react';
+import ShopContext from '../shop/ShopingContext';
+
+
+
+
 
 // Define a type for CartModal ref
 interface CartModalRef {
@@ -13,11 +14,20 @@ interface CartModalRef {
 }
 
 
-export default function Header({ cart, onUpdateCartItemQuantity }: HeaderProps
-) {
+export default function Header() {
+
+  // const { items } = useContext(ShopContext);
+
+  const shopingData = useContext(ShopContext);
+
+  console.log(shopingData);
+
+
   const modal: RefObject<CartModalRef> = useRef<CartModalRef>(null);
 
-  const cartQuantity = cart.items.length;
+  const cartQuantity = shopingData?.items.length;
+  console.log(cartQuantity);
+
 
   function handleOpenCartClick() {
     if (modal.current) {
@@ -28,7 +38,7 @@ export default function Header({ cart, onUpdateCartItemQuantity }: HeaderProps
 
   let modalActions = <button>Close</button>;
 
-  if (cartQuantity > 0) {
+  if (cartQuantity && cartQuantity > 0) {
     modalActions = (
       <>
         <button>Close</button>
@@ -41,8 +51,6 @@ export default function Header({ cart, onUpdateCartItemQuantity }: HeaderProps
     <>
       <CartModal
         ref={modal}
-        cartItems={cart.items}
-        onUpdateCartItemQuantity={onUpdateCartItemQuantity}
         title="Your Cart"
         actions={modalActions}
       />
