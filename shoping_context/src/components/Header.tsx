@@ -1,44 +1,22 @@
-import { RefObject, useRef } from 'react';
-
+import { RefObject, useRef, useContext } from 'react';
 import CartModal from './CartModal';
-import { useContext } from 'react';
 import ShopContext from '../shop/ShopingContext';
 
-
-
-
-
-// Define a type for CartModal ref
-interface CartModalRef {
-  showModal: () => void;
-}
-
-
 export default function Header() {
-
-  // const { items } = useContext(ShopContext);
-
   const shopingData = useContext(ShopContext);
+  const modal: RefObject<HTMLDialogElement> = useRef(null); // Correct type here
 
-  console.log(shopingData);
-
-
-  const modal: RefObject<CartModalRef> = useRef<CartModalRef>(null);
-
-  const cartQuantity = shopingData?.items.length;
-  console.log(cartQuantity);
-
+  const cartQuantity = shopingData?.items.length || 0;
 
   function handleOpenCartClick() {
     if (modal.current) {
-
-      modal.current.showModal()
+      modal.current.showModal(); // Correct use of HTMLDialogElement's showModal method
     }
   }
 
   let modalActions = <button>Close</button>;
 
-  if (cartQuantity && cartQuantity > 0) {
+  if (cartQuantity > 0) {
     modalActions = (
       <>
         <button>Close</button>
@@ -49,11 +27,7 @@ export default function Header() {
 
   return (
     <>
-      <CartModal
-        ref={modal}
-        title="Your Cart"
-        actions={modalActions}
-      />
+      <CartModal ref={modal} title="Your Cart" actions={modalActions} />
       <header id="main-header">
         <div id="main-title">
           <img src="logo.png" alt="Elegant model" />
@@ -66,3 +40,4 @@ export default function Header() {
     </>
   );
 }
+

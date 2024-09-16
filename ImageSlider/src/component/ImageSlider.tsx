@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import "../App.css";
 
-interface CustomIconProps extends BsArrowLeftCircleFill {
-  className?: string;
-}
-
-const ImageSlider = (
-  { url = "", page = 1, limit = 10 },
-  IconProp: CustomIconProps
-) => {
+const ImageSlider = ({ url = "", page = 1, limit = 10 }) => {
   const [images, setImages] = useState([]);
   const [curentImage, setCurentImage] = useState<number>(0);
   const [loding, setLoding] = useState<boolean>(false);
@@ -70,7 +63,6 @@ const ImageSlider = (
           );
         })}
       <BsArrowRightCircleFill
-        {...IconProp}
         className="arrow arrow-right"
         onClick={handleNext}
       />
